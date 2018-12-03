@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<gammaRayAnalysis>
+   <filtering>
+      <median>
+         <kernelSize>3</kernelSize>
+         <iterations>2</iterations>
+      </median>
+      <gaussian>
+         <kernelSize>3</kernelSize>
+         <sigma>-1</sigma>
+         <iterations>1</iterations>
+      </gaussian>
+   </filtering>
+
+   <localTransformation>
+      <!-- Stretching Parameters -->
+      <type>Stretching</type>
+      <kernelSize>14</kernelSize>
+      <stepSize>10</stepSize>
+      <minBins>5</minBins>
+   </localTransformation>
+  
+   <!--<localTransformation>-->
+      <!--&lt;!&ndash; Equalization parameters &ndash;&gt;-->
+      <!--<type>Equalization</type>-->
+      <!--<kernelSize>15</kernelSize>-->
+      <!--<clipLimit>2.0</clipLimit>-->
+   <!--</localTransformation> -->
+
+   <segmentation>
+      <type>Adaptive</type>
+      <filter>Mean</filter> <!-- Mean/Gaussian -->
+      <blockSize>13</blockSize>
+      <constant>-7</constant>
+   </segmentation>
+
+   <binaryMorphology>
+      <type>Opening</type> <!-- Opening/Closing/Erosion/Dilation -->
+      <shape>Ellipse</shape>
+      <size>7</size>
+   </binaryMorphology>
+
+   <blobDetector>
+      <filterArea>True</filterArea>
+      <minArea>15</minArea>
+      <!-- <maxArea>20</maxArea> -->
+      <filterCircularity>True</filterCircularity>
+      <minCircularity>0.2</minCircularity>
+   </blobDetector>
+   <!-- MISC -->
+   <debugImages>False</debugImages>
+</gammaRayAnalysis>
