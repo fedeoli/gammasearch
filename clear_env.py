@@ -15,12 +15,20 @@ def clear():
 		os.remove('ctselect.log')
 	if os.path.isfile('sigma_recap.log'):
 		os.remove('sigma_recap.log')
+	if os.path.isfile('single.log'):
+		os.remove('single.log')
+	if os.path.isfile('final.log'):
+		os.remove('final.log')
+	if os.path.isfile('general.log'):
+		os.remove('general.log')
 	if os.path.isfile('cube.fits'):
 		os.remove('cube.fits')
 	if os.path.isfile('events.fits'):
 		os.remove('events.fits')
 	if os.path.isfile('selected_events.fits'):
 		os.remove('selected_events.fits')
+	if os.path.isfile('logfile_map'):
+		os.remove('logfile_map')
 	
 
 	if os.path.isdir('__pycache__'):

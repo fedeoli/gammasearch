@@ -113,9 +113,9 @@ int main(int argc, char *argv[]){
 //	fits image data transposition in the created Iplimage structure.
 	fits_pointer = fits_image_copy(fits_pointer, status, fpixel, size, source_image->imageData);
 
-	background = fits_image_open(background,"./background.fits", status, hdu_type, hdu_num, hdu_nums);
-	fits_pointer = fits_image_read_param(background, status, bitpix, dim, size);
-	fits_pointer = fits_image_copy_float(fits_pointer, status, fpixel, size, back->imageData);
+	//background = fits_image_open(background,"./background.fits", status, hdu_type, hdu_num, hdu_nums);
+	//fits_pointer = fits_image_read_param(background, status, bitpix, dim, size);
+	//fits_pointer = fits_image_copy_float(fits_pointer, status, fpixel, size, back->imageData);
 
 //	Image display if visual == "y"
 	if(*visual == 'y')
