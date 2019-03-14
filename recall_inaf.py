@@ -150,8 +150,8 @@ def main():
 ##################################################################################################
 def usage():
 	parser = argparse.ArgumentParser(description='program devoted to create random gamma sources in a given sky region')
-	parser.add_argument('observation input file', metavar = 'filename', type=str, help='source file used by the program' )
-	parser.add_argument('configuration input file', metavar = 'fileconf', type=str, help='configuration file used by the program' )
+	parser.add_argument('RA source coordinate', metavar = 'RA', type=str, help='RA source coordinate - celestial coordinates' )
+	parser.add_argument('DEC source coordinate', metavar = 'DEC', type=str, help='RA source coordinate - celestial coordinates' )
 	parser.add_argument('source significativity', metavar = 'sigma', type=float, help='ratio between source intensity and the square root of the background intensity' )
 	parser.add_argument('number of generated maps', metavar = 'n_maps', type=int, help='number of generated maps' )
 	args = parser.parse_args()

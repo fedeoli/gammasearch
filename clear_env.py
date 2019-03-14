@@ -7,6 +7,22 @@ def clear():
 		os.remove('est_error.log')
 	if os.path.isfile('est_map.log'):
 		os.remove('est_map.log')
+	if os.path.isfile('ctbin.log'):
+		os.remove('ctbin.log')
+	if os.path.isfile('ctobssim.log'):
+		os.remove('ctobssim.log')
+	if os.path.isfile('ctselect.log'):
+		os.remove('ctselect.log')
+	if os.path.isfile('sigma_recap.log'):
+		os.remove('sigma_recap.log')
+	if os.path.isfile('cube.fits'):
+		os.remove('cube.fits')
+	if os.path.isfile('events.fits'):
+		os.remove('events.fits')
+	if os.path.isfile('selected_events.fits'):
+		os.remove('selected_events.fits')
+	
+
 	if os.path.isdir('__pycache__'):
 		shutil.rmtree('__pycache__')
 	if os.path.isdir('ANALYSIS3'):
