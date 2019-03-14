@@ -1,0 +1,3 @@
+[submodule "GammaPipeCommon"]
+	path = GammaPipeCommon
+	url = https://github.com/rta-pipe/GammaPipeCommon.git

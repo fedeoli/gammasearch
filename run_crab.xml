@@ -1,0 +1,13 @@
+<run id="2">
+  <parameter name="RegionOfInterest" ra="222.0" dec="45.0" skypositiontype="1" radius="10.0" AlertContour="None" frame="fk5" unit="deg"/>
+  <parameter name="TimeIntervals" tmin="55197.0007660185" tmax="55197.0224326852" timeunit="day" timesys="mjd" />
+  <parameter name="ScienceToolReference" timestart="55197.000766018518519" timeunit="day" timesys="mjd" timeref="LOCAL" skyframe="fk5" skyframeunit='deg' />
+  <parameter name="Energy"  emin="0.1"  emax="100" energyBinID="" />
+  <parameter name="DataInfo" datarepositoryid="1"/>
+  <parameter name="DirectoryList" run="/tmp/CTA-SOUTH/DREVT_CTA_O3/ctools-lc_LC10s/T430579548_430579558_E0.1_10000_P184.557449_-5.78436/" results="/ANALYSIS3/CTA-SOUTH/DREVT_CTA_O3/ctools-lc_LC10s/T430579548_430579558/" runprefix="T430579548_430579558_E0.1_10000_P184.557449_-5.78436" />
+  <parameter name="WorkInMemory" value="0"  />
+  <parameter name="MakeCtsMap" value="1" />
+  <parameter name="CountsMap" enumbins="1" nxpix="200" nypix="200" binsz="0.02" coordsys="CEL" proj="CAR" ebinalg="LOG" usepnt="True" />
+  <parameter name="HypothesisGenerator3GH" value="0" />
+  <parameter name="CtsMapToPng" value="1" />
+</run>
