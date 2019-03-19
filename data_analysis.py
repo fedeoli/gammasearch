@@ -1,8 +1,8 @@
-##############################################################################
+############################################################
 # INTESTAZIONE DA DECIDERE
 
 # This library has been developed to perform statistical analysis on big amounts of source images
-##############################################################################
+############################################################
 
 
 # IMPORTS
@@ -36,29 +36,38 @@ from tqdm import tqdm
 import map_creator
 import order
 
-##############################################################################
-# This function aims to process big amounts of source images in order to perform some statistical analysis on the number of estimated 
-# sources and their estimated positions, expressed in RA and DEC. The library is organized as follows:
-#		1)	function main() :				this function is a sort of wrapper, allowing the user to analyze a bunch of images from  
-#										scratch, through some parameters
-#		2)	function usage() :				this function prints an inline help by calling "python data_analysis.py -h"
-#		3)	function words(): 				this function returns an array containing all the words on a given file
-#		4)	function find_n_maps() :		this function reads the number of maps from a lgiven ogfile (see below)
-#		5) 	function true_coordinates() :	this functin stores in an array all the coordinates written in a given logfile (see below)
-#		6)	function convert_data() :		this function performs the analysis of the source images using "analyze_map.bin" 
-#										algorithm (see related documentation)
-#		7)	function switcher() :			this function calls "convert_data()" with different parameters, according to argv[] values
-#		8)	function difference() :			this function evaluates the estimation error of the algorithm
-#		9)	function statistics() :			this function computes the main statistics from the array returned by "difference()"
+############################################################
+# This function aims to process big amounts of source images in order to perform some statistical 
+# analysis on the number of estimated sources and their estimated positions, expressed in RA and DEC. 
+# The library is organized as follows:
+#		1)	function main() :				this function is a sort of wrapper, allowing the user to   
+#										analyze a bunch of images from scratch, through some 
+#										parameters
+#		2)	function usage() :				this function prints an inline help by calling 
+#										"python data_analysis.py -h"										
+#		3)	function words(): 				this function returns an array containing all the words in
+#										a given file
+#		4)	function find_n_maps() :		this function reads the number of maps from a  given 
+#										logfile (see below)
+#		5) 	function true_coordinates() :	this functin stores in an array all the coordinates written 
+#										in a given logfile (see below)
+#		6)	function convert_data() :		this function performs the analysis of the source images 
+#										using "analyze_map.bin"  algorithm 
+#										(see related documentation)
+#		7)	function switcher() :			this function calls "convert_data()" with different 
+#										parameters, according to argv[] values
+#		8)	function difference() :			this function evaluates the error of the algorithm
+#		9)	function statistics() :			this function computes the main statistics from the array 
+#										returned by "difference()"
 #		10)	function plot_result() :		this function plots the previously computed values
 #		11)	function write_data() :		this function writes the estimated coordinates on a logfile
-##############################################################################			 	
+############################################################			 	
 
 
-##############################################################################
-# This function works as a wrapper for the data analysis procedure. All the functions that will be used can also be launched as 
-# standalone in a python environment. 
-##############################################################################
+############################################################
+# This function works as a wrapper for the data analysis procedure. All the functions that will be used 
+# here can also be launched as  standalone in a python environment. 
+############################################################
 def main():
 
 	# call the usage function in order to print the inline help if needed
@@ -90,20 +99,25 @@ def main():
 	[n_sources_array, coord_array] = true_coordinates(logfile, n_maps)
 
 	# analyze all the maps depending on the given parameters (see switcher function)
-	[est_n_sources_array_b, est_n_sources_array_i, est_n_sources_array_m, est_coord_array_b, est_coord_array_i, est_coord_array_m] = switcher(n_maps, center_type, sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
+	[est_n_sources_array_b, est_n_sources_array_i, est_n_sources_array_m, est_coord_array_b, 
+est_coord_array_i, est_coord_array_m] = switcher(n_maps, center_type, sigma_spa, accept_level, 
+radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
 
 	# set the number of real sources 
 	true_n_sources = int(len(coord_array)/2)
 
 	# error evaluation through function difference and depending on the input parameters
 	if center_type.find('b') != -1:
-		[diff_array_b, error_b] = difference(n_maps, n_sources_array, est_n_sources_array_b, coord_array, est_coord_array_b)
+		[diff_array_b, error_b] = difference(n_maps, n_sources_array, est_n_sources_array_b, 
+coord_array, est_coord_array_b)
 		[mean_dec_b, mean_ra_b, var_dec_b, var_ra_b] = statistics(diff_array_b)
 	if center_type.find('i') != -1:
-		[diff_array_i, error_i] = difference(n_maps, n_sources_array, est_n_sources_array_i, coord_array, est_coord_array_i)
+		[diff_array_i, error_i] = difference(n_maps, n_sources_array, est_n_sources_array_i, 
+coord_array, est_coord_array_i)
 		[mean_dec_i, mean_ra_i, var_dec_i, var_ra_i] = statistics(diff_array_i) 
 	if center_type.find('m') != -1:
-		[diff_array_m,error_m] = difference(n_maps, n_sources_array, est_n_sources_array_m, coord_array, est_coord_array_m) 
+		[diff_array_m,error_m] = difference(n_maps, n_sources_array, est_n_sources_array_m, 
+coord_array, est_coord_array_m) 
 		[mean_dec_m, mean_ra_m, var_dec_m, var_ra_m] = statistics(diff_array_m)
 	
 
@@ -112,61 +126,74 @@ def main():
 	print('N_maps = ' + str(n_maps))
 	print('\nN. TRUE SOURCES:	' + str(true_n_sources) + '\n')
 	if center_type.find('b') != -1:
-		print(str(mean_dec_b) + '\t' + str(mean_ra_b) + '\t' + str(var_dec_b) + '\t' + str(var_ra_b) + '\n')
+		print(str(mean_dec_b) + '\t' + str(mean_ra_b) + '\t' + str(var_dec_b) + '\t' + str(var_ra_b) \
++ '\n')
 		est_n_sources_b = int(len(est_coord_array_b)/2)
 		print('N. ESTIMATED SOURCES (baricenter):	' + str(est_n_sources_b))
 		print('ERROR:\t' + str(error_b))
 		write_data(est_n_sources_array_b, est_coord_array_b, fits_dir)
-#		plot_result(diff_array_b)
 	if center_type.find('i') != -1:
-		print(str(mean_dec_i) + '\t' + str(mean_ra_i) + '\t' + str(var_dec_i) + '\t' + str(var_ra_i) + '\n')
+		print(str(mean_dec_i) + '\t' + str(mean_ra_i) + '\t' + str(var_dec_i) + '\t' + str(var_ra_i) \
++ '\n')
 		est_n_sources_i = int(len(est_coord_array_i)/2)
 		print('N. ESTIMATED SOURCES (intensity):	' + str(est_n_sources_i))
 		print('ERROR:\t' + str(error_i))
 		write_data(est_n_sources_array_i, est_coord_array_i, fits_dir)
-#		plot_result(diff_array_i)
 	if center_type.find('m') != -1:
-		print(str(mean_dec_m) + '\t' + str(mean_ra_m) + '\t' + str(var_dec_m) + '\t' + str(var_ra_m) + '\n') 
+		print(str(mean_dec_m) + '\t' + str(mean_ra_m) + '\t' + str(var_dec_m) + '\t' + str(var_ra_m) \
++ '\n') 
 		est_n_sources_m = int(len(est_coord_array_m)/2)
 		print('N. ESTIMATED SOURCES (mean):	' + str(est_n_sources_m))
 		print('ERROR:\t' + str(error_m))
 		write_data(est_n_sources_array_m, est_coord_array_m, fits_dir)
-#		plot_result(diff_array_m)
 
 
-##############################################################################
-# function devoted to generate the parameters of the main program and the related --help function. All the parameters needed by the 
-# main function are described below
-##############################################################################
+############################################################
+# function devoted to generate the parameters of the main program and the related --help function. 
+# All the parameters needed by the main function are described below
+############################################################
 def usage():
-	parser = argparse.ArgumentParser(description='program devoted to analyze generated maps and compare the obtained data to the theoretical expected results')
-	parser.add_argument('theoretical map coordinates', metavar = 'logfile', type=str, help='theoretical map log (previously generated by recall.py)' )
-	parser.add_argument('Generated Fits folder', metavar = 'fits_dir', type=str, help='Directory where generated fits file are saved' )
-	parser.add_argument('final result log file name', metavar = 'final_logfile', type=str, help='algorithm final result log file name' )
-	parser.add_argument('type of centers computation', metavar = 'center type', type=str, help='type of centers computation. Even multiple input: (e.g.)  bim = baricenter + intensity + mean' )
-	parser.add_argument('spatial gaussian sigma', metavar = 'sigma_spa', type=float, help='variance of the smoothing gaussian' )
-	parser.add_argument('percentage of accepted area', metavar = 'accept_level', type=float, help='percentage to reach in circle detection area check' )
-	parser.add_argument('mask circle radius', metavar = 'radius', type=int, help='template matching radius' )
-	parser.add_argument('binarization treshold (255 valued)', metavar = 'binary_treshold', type=int, help='treshold used for image binarization' )
-	parser.add_argument('intensity treshold ', metavar = 'intensity_treshold', type=float, help='background normalization treshold for intensity information handling' )
-	parser.add_argument('blob centers minimum distance', metavar = 'baricenter_distance', type=int, help='minimum distance for two blob centers to be considered as separated' )
+	parser = argparse.ArgumentParser(description='program devoted to analyze generated maps and \
+compare the obtained data to the theoretical expected results')
+	parser.add_argument('theoretical map coordinates', metavar = 'logfile', type=str, \
+help='theoretical map log (previously generated by recall.py)' )
+	parser.add_argument('Generated Fits folder', metavar = 'fits_dir', type=str, help='Directory \
+where generated fits file are saved' )
+	parser.add_argument('final result log file name', metavar = 'final_logfile', type=str, \
+help='algorithm final result log file name' )
+	parser.add_argument('type of centers computation', metavar = 'center type', type=str, \
+help='type of centers computation. Even multiple input: (e.g.)  bim = baricenter + intensity + mean' )
+	parser.add_argument('spatial gaussian sigma', metavar = 'sigma_spa', type=float, \
+help='variance of the smoothing gaussian' )
+	parser.add_argument('percentage of accepted area', metavar = 'accept_level', type=float, \
+help='percentage to reach in circle detection area check' )
+	parser.add_argument('mask circle radius', metavar = 'radius', type=int, \
+help='template matching radius' )
+	parser.add_argument('binarization treshold (255 valued)', metavar = 'binary_treshold', 
+\type=int, help='treshold used for image binarization' )
+	parser.add_argument('intensity treshold ', metavar = 'intensity_treshold', type=float, \
+help='background normalization treshold for intensity information handling' )
+	parser.add_argument('blob centers minimum distance', metavar = 'baricenter_distance', \
+type=int, help='minimum distance for two blob centers to be considered as separated' )
 	args = parser.parse_args()
 
 
-##############################################################################
-# This function simply takes a text file name as input and stores in an array all the words present in that file
-##############################################################################
+############################################################
+# This function simply takes a text file name as input and stores in an array all the 
+# words present in that file
+############################################################
 def words(fileobj):
     for line in fileobj:
         for word in line.split():
             yield word
 
-##############################################################################
-# This function takes as input the logfile created by "recall.py" where all the maps coordinates are stored. These coordinates will be 
-# used as benchmark to test the estimated ones
-##############################################################################
+############################################################
+# This function takes as input the logfile created by "recall.py" where all the maps coordinates are 
+# stored. These coordinates will be used as benchmark to test the estimated ones
+############################################################
 def find_n_maps(logfile):
 
+	# flag initialisation
 	i = False;
 
 	# open and split the logfile. Then look for the number of maps
@@ -181,17 +208,20 @@ def find_n_maps(logfile):
 
 	return n_maps
 
-##############################################################################
-# This function takes in input the logfile generated by recall.py and the total number of maps. It returns an array containing all the 
-# real coordinates in DEC and RA
-##############################################################################
+############################################################
+# This function takes in input the logfile generated by recall.py and the total number of maps. 
+# It returns an array containing all the real coordinates in DEC and RA
+############################################################
 def true_coordinates(logfile, n_maps):
 
 	# vars initialisation
 	# array with the sources coordinates
 	coord_array = [] 
 	
-	n_sources_array = numpy.zeros((n_maps), dtype = 'int')	# array with the number of sources per Map
+	# array with the number of sources per Map
+	n_sources_array = numpy.zeros((n_maps), dtype = 'int')	
+
+	# flag initialisation
 	j = True
 
 	# coordinates reading and storage
@@ -215,11 +245,13 @@ def true_coordinates(logfile, n_maps):
 
 	return n_sources_array, coord_array
 
-##############################################################################
-# This function performs the sources detection and the coordinates estimation by using the analyze_map.bin algorithm (see documentation)
+############################################################
+# This function performs the sources detection and the coordinates estimation by using the 
+# analyze_map.bin algorithm (see documentation)
 # It returns both the number of sources per map and the estimated coordinates in two separated arrays
-##############################################################################
-def convert_data(n_maps, center_type, sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir):
+############################################################
+def convert_data(n_maps, center_type, sigma_spa, accept_level, radius, binary_treshold, \
+intensity_treshold, baricenter_distance, fits_dir):
 
 	# var initialisation
 	est_n_sources_array = numpy.zeros(n_maps, dtype = 'int')
@@ -227,15 +259,18 @@ def convert_data(n_maps, center_type, sigma_spa, accept_level, radius, binary_tr
 
 	name = order.natural_list(fits_dir)
 
-	# map files analysis: the coordinates are evaluated in pixels and then converted in RA and DEC through the wcs:pix2world() function
+	# map files analysis: the coordinates are evaluated in pixels and then converted in RA and DEC 
+	# through the wcs:pix2world() function
 	for i in tqdm(range(0,n_maps), ascii=True, desc="Map analysis:"):
-	#for i in range(0,n_maps):
-		flag = False #first row reading flag
-		#name = 'Map_'+ str(i+1) + '.fits'
-		#print('iteration: ' + str(i+1))
-		call(["./final_3.bin", fits_dir + "/"+ str(name[i]), center_type, "logfile_map", "n", "n", sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance])
-		#input()
-		#call(["./analyze_map_smooth.bin", fits_dir + "/"+ str(name), center_type, "logfile_map", "n", "n", sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance])
+
+		#first row reading flag
+		flag = False 
+		
+		# C algorithm call
+		call(["./final_3.bin", fits_dir + "/"+ str(name[i]), center_type, "logfile_map", "n", "n", \
+sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance])
+		
+		# result conversion from pixels to celestial coordinates
 		with open('logfile_map', 'r') as f:
 			for line in f:
 				split_line = line.split()
@@ -246,23 +281,21 @@ def convert_data(n_maps, center_type, sigma_spa, accept_level, radius, binary_tr
 					temp_dec = float(split_line[0])
 					temp_ra = float(split_line[1])
 					w  = wcs.WCS( fits_dir + '/'+name[i])
-					#w  = wcs.WCS( fits_dir + '/'+name)
 					world = w.wcs_pix2world(temp_ra,200 - temp_dec, 1)
 					est_coord_array.append(world[1])
 					est_coord_array.append(world[0])
-					#print(name[i] +'\n')
-					#print(str(world[1])+'\t'+str(world[0])+'\n')
-					#input()
 		f.close()
 					
 	return est_n_sources_array, est_coord_array
 
-##############################################################################
-# this function calls the analyze_map.bin algorithm (in the convert_data() function) changing the parameters according to those 
-# entered by the user. It returns the estimated sources and n_sources arrays, containg respectively the estimated coordinates and
-# the number of source per each map
-##############################################################################
-def switcher(n_maps, center_type,sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir) :
+############################################################
+# this function calls the analyze_map.bin algorithm (in the convert_data() function) changing the 
+# parameters according to those entered by the user. It returns the estimated sources and 
+# n_sources arrays, containg respectively the estimated coordinates and the number of source 
+# per each map
+############################################################
+def switcher(n_maps, center_type,sigma_spa, accept_level, radius, binary_treshold, \
+intensity_treshold, baricenter_distance, fits_dir) :
 
 	# var initialisation
 	est_coord_array_b = []
@@ -275,39 +308,55 @@ def switcher(n_maps, center_type,sigma_spa, accept_level, radius, binary_treshol
 
 	# switch case driven by the entered parametrs and calling convert_data() 
 	if (center_type == 'b') :
-		[est_n_sources_array_b, est_coord_array_b] = convert_data(n_maps, 'b', sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
+		[est_n_sources_array_b, est_coord_array_b] = convert_data(n_maps, 'b', sigma_spa, \
+accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
 	elif (center_type == 'i') :
-		[est_n_sources_array_i, est_coord_array_i] = convert_data(n_maps, 'i', sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance , fits_dir )
+		[est_n_sources_array_i, est_coord_array_i] = convert_data(n_maps, 'i', sigma_spa, \
+accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance , fits_dir )
 	elif (center_type == 'm') :
-		[est_n_sources_array_m, est_coord_array_m] = convert_data(n_maps, 'm', sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
+		[est_n_sources_array_m, est_coord_array_m] = convert_data(n_maps, 'm', sigma_spa, \
+accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
 	elif ( (center_type == 'bi') or (center_type == 'ib') ) :
-		[est_n_sources_array_b, est_coord_array_b] = convert_data(n_maps, 'b', sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir )
-		[est_n_sources_array_i, est_coord_array_i] = convert_data(n_maps, 'i', sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
+		[est_n_sources_array_b, est_coord_array_b] = convert_data(n_maps, 'b', sigma_spa, \
+accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir )
+		[est_n_sources_array_i, est_coord_array_i] = convert_data(n_maps, 'i', sigma_spa, \
+accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
 	elif ( (center_type == 'bm') or (center_type == 'mb') ) :
-		[est_n_sources_array_b, est_coord_array_b] = convert_data(n_maps, 'b', sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
-		[est_n_sources_array_m, est_coord_array_m] = convert_data(n_maps, 'm', sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
+		[est_n_sources_array_b, est_coord_array_b] = convert_data(n_maps, 'b', sigma_spa, \
+accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
+		[est_n_sources_array_m, est_coord_array_m] = convert_data(n_maps, 'm', sigma_spa, \
+accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
 	elif ( (center_type == 'mi') or (center_type == 'im') ) :
-		[est_n_sources_array_i, est_coord_array_i] = convert_data(n_maps, 'i', sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
-		[est_n_sources_array_m, est_coord_array_m] = convert_data(n_maps, 'm', sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
+		[est_n_sources_array_i, est_coord_array_i] = convert_data(n_maps, 'i', sigma_spa, \
+accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
+		[est_n_sources_array_m, est_coord_array_m] = convert_data(n_maps, 'm', sigma_spa, \
+accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
 	elif ( (center_type == 'bi') or (center_type == 'ib') ) :
-		[est_n_sources_array_b, est_coord_array_b] = convert_data(n_maps, 'b', sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
-		[est_n_sources_array_i, est_coord_array_i] = convert_data(n_maps, 'i', sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
-	elif ( (center_type == 'bim') or (center_type == 'bmi') or (center_type == 'ibm') or (center_type == 'imb') or (center_type == 'mbi') or (center_type == 'mib') ) :
-		[est_n_sources_array_b, est_coord_array_b] = convert_data(n_maps, 'b', sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
-		[est_n_sources_array_i, est_coord_array_i] = convert_data(n_maps, 'i', sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
-		[est_n_sources_array_m, est_coord_array_m] = convert_data(n_maps, 'm', sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
+		[est_n_sources_array_b, est_coord_array_b] = convert_data(n_maps, 'b', sigma_spa, \
+accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
+		[est_n_sources_array_i, est_coord_array_i] = convert_data(n_maps, 'i', sigma_spa, \
+accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
+	elif ( (center_type == 'bim') or (center_type == 'bmi') or (center_type == 'ibm') or \
+(center_type == 'imb') or (center_type == 'mbi') or (center_type == 'mib') ) :
+		[est_n_sources_array_b, est_coord_array_b] = convert_data(n_maps, 'b', sigma_spa, \
+accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
+		[est_n_sources_array_i, est_coord_array_i] = convert_data(n_maps, 'i', sigma_spa, \
+accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
+		[est_n_sources_array_m, est_coord_array_m] = convert_data(n_maps, 'm', sigma_spa, \
+accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance, fits_dir)
 	else :
 		print('invalid center type\n')
 		return -1
 
-	return est_n_sources_array_b, est_n_sources_array_i, est_n_sources_array_m, est_coord_array_b, est_coord_array_i, est_coord_array_m
+	return est_n_sources_array_b, est_n_sources_array_i, est_n_sources_array_m, \
+est_coord_array_b, est_coord_array_i, est_coord_array_m
 
 
-##############################################################################
-# This functions takes as input the real and the estimated coordinates array and computes some statistical analysis. More precisely
-# it computes the mean and the variance of the error and the number of wrongly detected sources. The wrong map number is stored in 
-# est_error.log
-##############################################################################
+############################################################
+# This functions takes as input the real and the estimated coordinates array and computes some 
+# statistical analysis. More precisely it computes the mean and the variance of the error and the 
+# number of wrongly detected sources. The wrong map number is stored in est_error.log
+############################################################
 def difference(n_maps, n_sources_array, est_n_sources_array, coord_array, est_coord_array) :
 
 	# var initialisation
@@ -321,45 +370,19 @@ def difference(n_maps, n_sources_array, est_n_sources_array, coord_array, est_co
 	# open the errorlog file
 	open(errorlog, 'w').close()
 	log = open(errorlog, 'a')
-	##############################################################################
-	#  The estimation error is computed and stored in the difference array. The error on the estimated number of sources can be of 2 types:
+
+############################################################
+	#  The estimation error is computed and stored in the difference array. The error on the estimated
+	#  number of sources can be of 3 types:
 	#	1) the estimated number is less than the real one
-	#	2) 1) the estimated number is greater than the real one
-	# In both these cases not all the estimated coordinates are wrong. Therefore the estimated coordinates should be linked to the right 
-	# source among the real coordinates array. In doing so the estimated coordinates are not wasted. This task is performed by the 
-	# "fail_handle" function (see below). After this error habdling the results are stored in two arrays, difference and error, containing 
-	# respectively the coordinates error and the number of missed sources per map.
-	##############################################################################
-	'''for i in range(0,n_maps) :
-		
-		Flag = n_sources_array[i] - est_n_sources_array[i]
-		if ( Flag == 0):
-			for j in range(0, n_sources_array[i]):
-				difference.append(abs(float(coord_array[2*init] - est_coord_array[2*est_init]))) 
-				difference.append(abs(float(coord_array[2*init+1] - est_coord_array[2*est_init+1])))
-				init = init +1
-				est_init = est_init +1
-		else:
-			error = error + abs(Flag)
-			true_array = coord_array[2*init:2*(init+n_sources_array[i])]
-			est_array = est_coord_array[2*(est_init):2*(est_init+est_n_sources_array[i])]
-			
-			pos = fail_handle(true_array, est_array)
-			
-			
-			log.write('Map ' + str(i+1) + '\t' + str(pos) + '\n')
-	
-			if n_sources_array[i] > est_n_sources_array[i]:
-				for j in range(0,est_n_sources_array[i]):
-					difference.append(abs(float(coord_array[int(2*(init+pos[j]))] - est_coord_array[2*(est_init + j)]))) 		
-					difference.append(abs(float(coord_array[int(2*(init+pos[j]) +1)] - est_coord_array[2*(est_init+j) + 1])))
-			else:
-				for j in range(0,n_sources_array[i]):
-					difference.append(abs(float(coord_array[2*(init+j)] - est_coord_array[int(2*(est_init+pos[j]) )] ) ) ) 		
-					difference.append(abs(float(coord_array[2*(init+j) + 1] - est_coord_array[int(2*(est_init+pos[j]) +1)] ) ) )
-			 
-			init = init + n_sources_array[i]
-			est_init = est_init + est_n_sources_array[i]'''
+	#	2) the estimated number is greater than the real one
+	#	3) the estimated number is the same but the estimated coordinates are far from the real ones
+	# In both these cases not all the estimated coordinates are wrong. Therefore the estimated 
+	# coordinates should be linked to the right source among the real coordinates array. In doing so 
+	# the estimated coordinates are not wasted. 
+	# This task is performed by the "fail_handle" function (see below). After this error habdling the 
+	# results are stored in two arrays, difference and error, containing respectively the coordinates 
+	# error and the number of missed sources per map.	############################################################
 
 	for i in range(0,n_maps):
 		
@@ -398,8 +421,10 @@ def difference(n_maps, n_sources_array, est_n_sources_array, coord_array, est_co
 					ra_ind = j
 					dec_ind = j
 			if (pos < 0.5):
-				difference.append(abs(float(coord_array[2*init] - est_coord_array[2*(est_init + ra_ind)]))) 
-				difference.append(abs(float(coord_array[2*init+1] - est_coord_array[2*(est_init + dec_ind)+1])))
+				difference.append(abs(float(coord_array[2*init] - est_coord_array[2*(est_init + \
+ra_ind)]))) 
+				difference.append(abs(float(coord_array[2*init+1] - est_coord_array[2*(est_init + \
+dec_ind)+1])))
 				error = error + est_n_sources_array[i] - 1
 			else:	
 				error = error + est_n_sources_array[i] + 1
@@ -412,9 +437,10 @@ def difference(n_maps, n_sources_array, est_n_sources_array, coord_array, est_co
 	return difference, error
 				
 
-##############################################################################
-# This function computes and returns the main statistics (mean and variance) on the array generated by the "difference" funtion. 
-##############################################################################
+############################################################
+# This function computes and returns the main statistics (mean and variance) on the array generated 
+# by the "difference" funtion. 
+############################################################
 def statistics(difference) :
 	
 	# var initialisation
@@ -453,17 +479,21 @@ def statistics(difference) :
 
 	return mean_dec, mean_ra, var_dec, var_ra
 
-##############################################################################
-# This function handles the different kinds of error that can occur in the estimation if the number of sources in a map. 
-# The estimation error is computed and stored in the difference array. The error on the estimated number of sources can be of 2 types:
+############################################################
+# This function handles the different kinds of error that can occur in the estimation if the number 
+# of sources in a map. 
+# The estimation error is computed and stored in the difference array. The error on the estimated 
+# number of sources can be of 2 types:
 #	1) the estimated number is less than the real one
-#	2) 1) the estimated number is greater than the real one
-# The function takes as input the real number of sources and the estimated one (in 2 different array) and for each map generates all the
-# possible combinations of estimeted/real indexes (through a newton binomial). For each generated pair the error between the estimated
-# coordinates and the real ones is computed and compared to the error computed for the other pairs. The lowest error therefore identifies
-# the correct matching. The procedure is performed for both the error situations previously described. The array of correct matchings
-# is returned.
-##############################################################################
+#	2) the estimated number is greater than the real one
+#	3) the estimated number is the same but the estimated coordinates are far from the real ones
+# The function takes as input the real number of sources and the estimated one (in 2 different array) 
+# and for each map generates all the possible combinations of estimeted/real indexes (through a 
+# newton binomial). For each generated pair the error between the estimated coordinates and the real 
+# ones is computed and compared to the error computed for the other pairs. The lowest error 
+# therefore identifies the correct matching. The procedure is performed for both the error situations 
+# previously described. The array of correct matchings is returned.
+############################################################
 def fail_handle(true_array, est_array):
 
 	# var initilisation
@@ -526,9 +556,10 @@ def fail_handle(true_array, est_array):
 		
 	return pos
 
-##############################################################################
-# This function orders all the statistical results obtained from previous functions and plots them for both RA and DEC values
-##############################################################################
+############################################################
+# This function orders all the statistical results obtained from previous functions and plots 
+# them for both RA and DEC values
+############################################################
 def plot_result(diff_array):
 
 	# var initialisation
@@ -564,9 +595,9 @@ def plot_result(diff_array):
 		plt.show()
 		plt.waitforbuttonpress()
 
-##############################################################################
+############################################################
 # This function writes all the estimated coordinates values in a logfile named "est_map.log"
-##############################################################################
+############################################################
 def write_data(est_n_sources_array, est_coord_array, fits_dir):
 	
 	# var initialisation
@@ -580,7 +611,8 @@ def write_data(est_n_sources_array, est_coord_array, fits_dir):
 	# logfile header writing 
 	log.write('ESTIMATED COORDINATES \n\n')
 	log.write('TOTAL NUMBER OF ANALYZED MAPS:\t' + str(n_maps) + '\n\n')
-	log.write('MAP\t\t\t\t\t\t\t\t\t\t\t' + 'N_SOURCES\t\t\t' + 'RA\t\t\t\t\t\t\t\t' + 'DEC\n\n')
+	log.write('MAP\t\t\t\t\t\t\t\t\t\t\t' + 'N_SOURCES\t\t\t' + 'RA\t\t\t\t\t\t\t\t' + \
+'DEC\n\n')
 
 	# logfile data writing
 	pos = 0
@@ -588,7 +620,8 @@ def write_data(est_n_sources_array, est_coord_array, fits_dir):
 		log.write(name[i] + '\t\t\t\t\t\t\t\t\t\t\t' + str(est_n_sources_array[i]) + '\n')
 		#log.write('Map_' + str(i) + '\t\t\t\t\t\t\t\t\t\t\t' + str(est_n_sources_array[i]) + '\n')
 		for j in range(est_n_sources_array[i]):
-			log.write('\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t' + str(est_coord_array[2*(pos+j) + 1]) + '\t\t\t\t\t\t' + str(est_coord_array[2*(pos+j) ]) + '\n')
+			log.write('\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t' + str(est_coord_array[2*(pos+j) + 1]) + \
+'\t\t\t\t\t\t' + str(est_coord_array[2*(pos+j) ]) + '\n')
 		
 		pos = pos + est_n_sources_array[i]
 		log.write('\n\n')
