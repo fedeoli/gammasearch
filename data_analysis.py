@@ -37,7 +37,7 @@ import map_creator
 import order
 
 ############################################################
-# This function aims to process big amounts of source images in order to perform some statistical 
+# This library aims to process big amounts of source images in order to perform some statistical 
 # analysis on the number of estimated sources and their estimated positions, expressed in RA and DEC. 
 # The library is organized as follows:
 #		1)	function main() :				this function is a sort of wrapper, allowing the user to   
@@ -169,8 +169,8 @@ help='variance of the smoothing gaussian' )
 help='percentage to reach in circle detection area check' )
 	parser.add_argument('mask circle radius', metavar = 'radius', type=int, \
 help='template matching radius' )
-	parser.add_argument('binarization treshold (255 valued)', metavar = 'binary_treshold', 
-\type=int, help='treshold used for image binarization' )
+	parser.add_argument('binarization treshold (255 valued)', metavar = 'binary_treshold', \
+type=int, help='treshold used for image binarization' )
 	parser.add_argument('intensity treshold ', metavar = 'intensity_treshold', type=float, \
 help='background normalization treshold for intensity information handling' )
 	parser.add_argument('blob centers minimum distance', metavar = 'baricenter_distance', \
@@ -628,7 +628,9 @@ def write_data(est_n_sources_array, est_coord_array, fits_dir):
 
 	log.close()
 
-
+############################################################
+ # if the file is run from terminal exeute function main() by default
+############################################################
 if __name__ == "__main__":
     main()
 
