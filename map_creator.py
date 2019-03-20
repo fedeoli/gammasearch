@@ -75,7 +75,6 @@ def main():
 	open(log, 'w').close()
 	logfile = open(log, 'a')
 	coordinates = find_coordinates(logfile)
-	#background_prefactor = background_generation(min_background, max_background, logfile)
 	background_prefactor = 10
 	source_array = source_generation(coordinates, int(sys.argv[2]), background_prefactor, logfile)
 	sourcefile_generator(source_array, background_prefactor, sys.argv[3])
@@ -86,15 +85,15 @@ def main():
 ############################################################
 def usage():
 	parser = argparse.ArgumentParser(description='program devoted to create random gamma \
-sources in a given sky region')
+								    sources in a given sky region')
 	parser.add_argument('input file', metavar = 'filename', type=str, help='source file used by \
-the program' )
+						the program' )
 	parser.add_argument('max sources number', metavar = 'n_sources_max', type=int, \
-help='maximum number of sources per image' )
+						help='maximum number of sources per image' )
 	parser.add_argument('source file name', metavar = 'sourcefile', type=str, \
-help='generated source file name' )
+						help='generated source file name' )
 	parser.add_argument('name of the logfile', metavar = 'logfile', type=str, \
-help='name of the logfile where generated data will be saved' )
+						help='name of the logfile where generated data will be saved' )
 	args = parser.parse_args()
 
 
@@ -135,7 +134,7 @@ def source_generation( position, n_sources_max, background_prefactor, logfile):
 	for i in range(0,n_sources):
 		for j in range(0,n_sources - 1 - i):
 			if ( (source_array[j][1] < source_array[j+1][1] ) or (  (source_array[j][1] == \
-source_array[j+1][1] ) and (source_array[j][0] < source_array[j+1][0]) ) ):
+				source_array[j+1][1] ) and (source_array[j][0] < source_array[j+1][0]) ) ):
 				temp = source_array[j][0]
 				source_array[j][0] = source_array[j+1][0]
 				source_array[j+1][0] = temp
@@ -149,7 +148,7 @@ source_array[j+1][1] ) and (source_array[j][0] < source_array[j+1][0]) ) ):
 	# logfile writing
 	for i in range(0,n_sources):
 		logfile.write('\t\t\t\t\t\t\t\t\t\t' + str(source_array[i][0]) + '\t' + \
-str(source_array[i][1]) + '\t\t' + str(source_array[i][2]) + '\n')
+					str(source_array[i][1]) + '\t\t' + str(source_array[i][2]) + '\n')
 
 	return source_array
 
@@ -189,7 +188,7 @@ def source_generation_INAF(position, background_prefactor, sigma, logfile):
 	for i in range(0,n_sources):
 		for j in range(0,n_sources - 1 - i):
 			if ( (source_array[j][1] < source_array[j+1][1] ) or (  (source_array[j][1] == \
-source_array[j+1][1] ) and (source_array[j][0] < source_array[j+1][0]) ) ):
+				source_array[j+1][1] ) and (source_array[j][0] < source_array[j+1][0]) ) ):
 				temp = source_array[j][0]
 				source_array[j][0] = source_array[j+1][0]
 				source_array[j+1][0] = temp
@@ -203,7 +202,7 @@ source_array[j+1][1] ) and (source_array[j][0] < source_array[j+1][0]) ) ):
 	# logfile writing
 	for i in range(0,n_sources):
 		logfile.write('\t\t\t\t\t\t\t\t\t\t' + str(source_array[i][0]) + '\t' + \
-str(source_array[i][1]) + '\t\t' + str(source_array[i][2]) + '\n')
+					str(source_array[i][1]) + '\t\t' + str(source_array[i][2]) + '\n')
 
 	return source_array	
 
@@ -235,11 +234,11 @@ def sourcefile_generator(source_array, background_prefactor, filename):
 		source.write("  <source name=\"" + "Source_" + str(i+1) + "\" type=\"PointSource\">\n")
 		source.write("    <spectrum type=\"PowerLaw\">\n")
 		source.write("       <parameter name=\"Prefactor\"   \
-scale=\"1e-17\" value=\"2\" min=\"1e-07\" max=\"1000.0\" free=\"1\"/>\n")
+					scale=\"1e-17\" value=\"2\" min=\"1e-07\" max=\"1000.0\" free=\"1\"/>\n")
 		source.write("       <parameter name=\"Index\"       \
-scale=\"-1\"    value=\"2.48\" min=\"0.0\"   max=\"+5.0\"   free=\"1\"/>\n")
+					scale=\"-1\"    value=\"2.48\" min=\"0.0\"   max=\"+5.0\"   free=\"1\"/>\n")
 		source.write("       <parameter name=\"PivotEnergy\" scale=\"1e6\"   \
-value=\"0.3\"  min=\"0.01\"  max=\"1000.0\" free=\"0\"/>\n")
+					value=\"0.3\"  min=\"0.01\"  max=\"1000.0\" free=\"0\"/>\n")
 		source.write("    </spectrum>\n")
 		source.write("    <spatialModel type=\"PointSource\">\n")
 		source.write("      <parameter name=\"RA\"  scale=\"1.0\" value=\"" + \
@@ -251,14 +250,14 @@ str(source_array[i][1]) + "\" min=\"-90\"  max=\"90\"  free=\"0\"/>\n")
 
 	# background data writing
 	source.write("  <source name=\"CTABackgroundModel\" type=\"CTAIrfBackground\" \
-instrument=\"CTA\">\n")
+				instrument=\"CTA\">\n")
 	source.write("    <spectrum type=\"PowerLaw\">\n")
 	source.write("      <parameter name=\"Prefactor\"   scale=\"1.0\"  value=\"1\"  \
-min=\"1e-3\" max=\"10\"   free=\"1\"/>\n")
+				min=\"1e-3\" max=\"10\"   free=\"1\"/>\n")
 	source.write("      <parameter name=\"Index\"       scale=\"1.0\"  value=\"0.0\"  \
-min=\"-5.0\" max=\"+5.0\"   free=\"1\"/>\n")
+				min=\"-5.0\" max=\"+5.0\"   free=\"1\"/>\n")
 	source.write("      <parameter name=\"PivotEnergy\" scale=\"1e6\"  value=\"1.0\"  \
-min=\"0.01\" max=\"1000.0\" free=\"0\"/>\n")
+				min=\"0.01\" max=\"1000.0\" free=\"0\"/>\n")
 	source.write("    </spectrum>\n")
 	source.write("  </source>\n")
 	source.write("</source_library>")

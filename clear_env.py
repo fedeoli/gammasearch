@@ -77,7 +77,8 @@ def clear():
 ############################################################
 def usage():
 	parser = argparse.ArgumentParser(description='program devoted to clear the working directory \
-from all junk/previous analysis files.\nJust run in a console "python clear_env.py"')
+								     from all junk/previous analysis files.\nJust run in a console \
+								     "python clear_env.py"')
 	args = parser.parse_args()
 
 
