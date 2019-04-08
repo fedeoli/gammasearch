@@ -1,9 +1,11 @@
-##############################################################################
+############################################################
 # INTESTAZIONE DA DECIDERE
 
-# This library has been developed to perform statistical analysis on big amounts of source images
-##############################################################################
+# Created by:	Elena Ruggiano, Federico Oliva
+# Date: 	23-03-2018	
 
+# This library has been developed to run the C algorithm from python
+############################################################
 
 # IMPORTS
 # All the libraries can be installed by pip except for:
@@ -35,6 +37,12 @@ import map_creator
 import order
 import data_analysis
 
+############################################################
+# This library just calls the C algotithm from a python environment
+# The library is organized as follows:
+#		1)	function single_analysis) : this function calls the C algorithm with the parameters 							       #								     specified by the user											
+############################################################
+
 def single_analysis():
 
 	# parameters initialisation from argv (see usage() documentation)
@@ -49,15 +57,19 @@ def single_analysis():
 	baricenter_distance = sys.argv[9]
 	show = sys.argv[10]
 
-
+	# estimation data init
 	est_coord_array = []
 
+	# check if logfile is present 
 	if os.path.isfile('logfile_map'):
 		os.system('rm logfile_map' )
 
+	# algorithm call instance
 	flag = False #first row reading flag
-	call(["./final_3.bin", fits_file, center_type, "logfile_map", show, "n", sigma_spa, accept_level, radius, binary_treshold, intensity_treshold, baricenter_distance])
+	call(["./final_3.bin", fits_file, center_type, "logfile_map", show, "n", sigma_spa, accept_level, 
+radius, binary_treshold, intensity_treshold, baricenter_distance])
 		
+	# data conversion from pixel to celestial coordinates
 	with open('logfile_map', 'r') as f:
 		for line in f:
 			split_line = line.split()
@@ -73,15 +85,18 @@ def single_analysis():
 				est_coord_array.append(world[0])
 		f.close()
 	
+		# file management
 		if os.path.isfile(dest_logfile):
 			os.system('rm ' + str(dest_logfile))		
 	
+		# logfile creation
 		dest = open(dest_logfile, 'w+')
 		dest.write("N_SOURCES = " + str(n_sources) + " \n\n")
 		if (n_sources != 0):
 			dest.write("SOURCE\t\t\tRA\t\t\t\tDEC\n")
 			for i in range(n_sources):
-				dest.write("SOURCE " + str(i) + "\t\t" + str(est_coord_array[2*i + 1]) + "\t\t" + str(est_coord_array[2*i]) + "\n")
+				dest.write("SOURCE " + str(i) + "\t\t" + str(est_coord_array[2*i + 1]) + "\t\t" + \
+str(est_coord_array[2*i]) + "\n")
 
 		dest.close()
 

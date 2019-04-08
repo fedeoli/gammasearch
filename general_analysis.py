@@ -1,5 +1,8 @@
-############################################################
+#############################################################
 # INTESTAZIONE DA DECIDERE
+
+# Created by:	Elena Ruggiano, Federico Oliva
+# Date: 	23-03-2018	
 
 # This library has been developed to run the detection algorithm on a general .fits file folder, without
 # knowing the real coordinates of the present sources
