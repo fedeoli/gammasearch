@@ -53,27 +53,27 @@ This repo develops an algorithm that locates gamma ray sources coordinates from 
 
 		> g++ -O0 -g3 -Wall -fmessage-length=0 -g -pthread -I/path/to/include/opencv -I/path/to/fitsio/include $(pkg-config --cflags --libs opencv) -lcfitsio -o test gamma_algorithm.cpp functions.cpp
 
-	WATCHOUT!! if you're building under archlinux there's an issue with the vtk library whose filesystem organization has been modified. Check "https://www.reddit.com/r/archlinux/comments/ams21f/linking_errors_with_opencv/"
+	WATCHOUT!! if you're building under archlinux there's an issue with the vtk library whose filesystem organization has been modified. Check "https://www.reddit.com/r/archlinux/comments/ams21f/linking_errors_with_opencv/". Working with vtk 8.1.2-2
 
 
 FOR (ALMOST) EACH FUNCTION AN INLINE HELP IS AVAILABLE (except for order.py and param_ which is meant to be used as a library).
 
 	> (e.g.) python file.py -h
 
-TESTING COMMANDS:
+TESTING COMMANDS: (run test.sh)
 
 MAP CREATION AND ZIPPING (not necessary - zipdir already provided)
 		> python recall_inaf.py 220 45 4 10
-		> python zipper.py Generated_Events Generated_Maps
+		> python zipper.py Generated_Maps Generated_Events 220 45
 
 SINGLE ANALYSIS
-		> python -W ignore python_launch.py zipdir/sigma3/Map_1.fits single.log b 2.3 0.8 3 23 4.5 66 y
+		> python -W ignore python_launch.py zipdir/total/Map_1.fits single.log b 2.3 0.8 3 23 3.9 66 y
 
 ANALYSIS ON THE GENERATED VALUES (generated files: final.log + est_error.log + est_map.log)
-		> python -W ignore data_analysis.py zipdir/Map.log zipdir/total final.log b 2.3 0.8 3 23 4.5 66
+		> python -W ignore data_analysis.py zipdir/Map.log zipdir/total final.log b 2.3 0.8 3 23 3.9 66
 
 ANALYSIS ON A GENERAL .fits FOLDER (WITHOUT KNOWN VALUES - generated files: general.log)
-		> python -W ignore general_analysis.py zipdir/total final.log b 2.3 0.8 3 23 4.5 66
+		> python -W ignore general_analysis.py zipdir/total final.log b 2.3 0.8 3 23 3.9 66
 
  
 

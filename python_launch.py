@@ -100,6 +100,9 @@ str(est_coord_array[2*i]) + "\n")
 
 		dest.close()
 
+############################################################
+ # if the file is run from terminal exeute function single_analysis() by default
+############################################################
 if __name__ == "__main__":
     single_analysis()
 

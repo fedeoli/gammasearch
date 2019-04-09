@@ -180,6 +180,8 @@ def usage():
 						of generated maps' )
 	args = parser.parse_args()
 
-
+############################################################
+ # if the file is run from terminal exeute function main() by default
+############################################################
 if __name__ == "__main__":
     main()

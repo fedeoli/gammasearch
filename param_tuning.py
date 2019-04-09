@@ -172,6 +172,8 @@ est_n_sources_array_m, coord_array, est_coord_array_m)
 		mean = math.sqrt(mean_dec_m**2 + mean_ra_m**2)
 		return error_m, mean
 
-
+############################################################
+ # if the file is run from terminal exeute function main() by default
+############################################################
 if __name__ == "__main__":
     main()
