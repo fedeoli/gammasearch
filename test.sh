@@ -21,3 +21,6 @@ echo "PASSED"
 echo "TEST: general_analysis"
 python -W ignore general_analysis.py zipdir/total final.log b 2.3 0.8 3 23 3.9 66
 echo "PASSED"
+
+echo "CLEARING THE FILESYSTEM"
+python clear_env.py
