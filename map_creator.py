@@ -70,6 +70,9 @@ def main():
 #	      iii) source generation:		random generation of the number of sources per map, 
 #								coordinates (RA and DEC) and intensity of the source itself.
 #	      iv) logfile creation:			writing the obtained data on designed logfile (see also "recall.py")
+#
+#	NB:	now the source generation is done by the source_generation method. Remember that there's
+#		also the source_generation_INAF one. 
 ############################################################
 	log = sys.argv[4]
 	open(log, 'w').close()

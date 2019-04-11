@@ -6,7 +6,6 @@
 #include "opencv2/core/types_c.h"
 #include "opencv2/imgproc/imgproc_c.h"
 #include <math.h>
-#include <vtkInteractorObserver.h>
 
 
 #ifndef SHAREFILE_INCLUDED
