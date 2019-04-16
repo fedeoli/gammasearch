@@ -1,3 +1,4 @@
+#!/bin/bash
 echo "TEST: clear_env.py"
 python clear_env.py
 echo "PASSED"
