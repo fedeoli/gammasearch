@@ -186,7 +186,7 @@ def source_generation_INAF(position, background_prefactor, sigma, logfile):
 	for i in range(0,n_sources):
 		source_array[i][0] = round(random.uniform(ra_range[0], ra_range[1]),2)
 		source_array[i][1] = round(random.uniform(dec_range[0], dec_range[1]),2)
-		source_array[i][2] = sigma*math.sqrt(background_prefactor)
+		source_array[i][2] = (sigma**2)*(1 + math.sqrt(sigma**2 + 4*background_prefactor))/2
 
 	for i in range(0,n_sources):
 		for j in range(0,n_sources - 1 - i):
