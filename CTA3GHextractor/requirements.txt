@@ -10,7 +10,7 @@ olefile==0.44
 opencv-contrib-python==3.3.0.10
 Pillow==4.3.0
 pluggy==0.6.0
-py==1.5.2
+py==1.10.0
 pyfits==3.5
 pyparsing==2.2.0
 pytest==3.3.1
